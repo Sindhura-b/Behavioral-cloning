@@ -42,7 +42,7 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-Nvidia autonomous vehicle team's model architecture has been implemented in this project (model.py lines 92-103). Model consists of 5 convolutional layers with different depths ranging from 24 to 64 and filter sizes of 5x5 and 3x3. Output of each layer is activated by 'ReLu' function. The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 93). Following these layers flatten and fully connected layers with different depths 100, 50, 1 are added to the model. 
+NVIDIA autonomous vehicle team's model architecture has been implemented in this project (model.py lines 92-103). Model consists of 5 convolutional layers with different depths ranging from 24 to 64 and filter sizes of 5x5 and 3x3. Output of each layer is activated by 'ReLu' function. The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 93). Following these layers flatten and fully connected layers with different depths 100, 50, 1 are added to the model. 
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -114,4 +114,4 @@ The below GIF shows simulation of autonomous vehicle model using the architectur
 
 1. The model failed to run on Track-2 as it was trained on Track-1 data set. However, as Track-2 is quite different from Track-1, generating Track-2 driving data from simulator and using it for training can definitely improve the performance of the model on Track-2.
 
-2. Other than utlizing the data from three cameras, the data set can be enlarged by flipping data, adjusting brightness, rotating images and shearing images. Doing this not only increases the amount of data for training, but also makes the model robust to a variety of driving environment conditions.
+2. Other than utlizing the data from three cameras, the data set can be enlarged by flipping images, adjusting brightness, rotating images and shearing images. Doing this not only increases the amount of data for training, but also makes the model robust to a variety of driving environment conditions.
