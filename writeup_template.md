@@ -1,12 +1,6 @@
-# **Behavioral Cloning** 
-
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+# **Behavioral Cloning Project** 
 
 ---
-
-**Behavioral Cloning Project**
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -18,16 +12,10 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
-## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+[image1]: ./histogram_new_data_set.png "Model Visualization"
+[image2]: ./histogram_raw.png "Grayscaling"
+[image3]: ./mean_square_error.png "Recovery Image"
+[image4]: ./video.gif "Recovery Image"
 
 ---
 ### Files Submitted & Code Quality
@@ -54,15 +42,13 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
-
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+Nvidia autonomous vehicle team's model architecture has been implemented in this project (model.py lines 92-103). Model consists of 5 convolutional layers with different depths ranging from 24 to 64 and filter sizes of 5x5 and 3x3. Output of each layer is activated by 'ReLu' function. The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 93). Following these layers flatten and fully connected layers with different depths 100, 50, 1 are added to the model. 
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model architecture was not modified by adding dropout layers. As this project was done using a CPU, the number of epochs used for training the model are kept low (3). The training and validation loss obtained using 3 epochs is considerably low and is decreasing through out training and validation process. Also, the model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). As overfitting was not observed, dropout layers have not been added.
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
@@ -70,7 +56,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road. I used the data provided by Udacity to train the model to drive on first track. The image data from simulator's cameras - left, center and right, was used to train the model. 
 
 For details about how I created the training data, see the next section. 
 
@@ -78,52 +64,48 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+My first step was to use a convolution neural network model similar to the Yan LeCunn's LeNet model architecture. The data for training and validation is obtained by splitting the collector simulator data in the ratio 4:1. I thought this model might be appropriate because it is one of the powerful models and performed very well in classifying traffic sign images (project-2). However, this architecture failed to drive the vehicle on road autonomously. So, I tried another model architecture which is even more powerful than LeNet, i.e, NVIDIA's CNN. When I attempted this architecture, the car drove further more distance but eventually went off the track. To overcome this issue, I decided to change/ increase the data used for training the model. 
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+Intially, I used the image data from center camera to train the model. But, Image data from side camera's can teach the model to steer back to the center when it drifts sideways. So, I decided to utilize the data provided by the left and right cameras. The corresponding steering angles for the left and right camera images are obatined by adding/subtracting a correction factor from the center steering angle. This correction factor is chosen to be 0.2 in this project. The code for combining the data from all camera's is implemented in 'gen_data' fuction. 
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+Histogram shows the first set of steering angle data used for model training (center camera):
 
-To combat the overfitting, I modified the model so that ...
+![Alt Text](./histogram_raw.png)
 
-Then I ... 
+Histogram shows the second set of steering angle data used for model training (left, center and right camera's):
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+![Alt Text](./histogram_new_data_set.png)
 
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+Combining the data from left and right camera's reduced the bias of steering angle towards 0 deg.
+
+The data for training and validation is pulled according to the requirement using 'generator' function, which also converts the data from BGR to RGB colorspace. The final step was to run the simulator to see how well the car was driving around track one. At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 92-103) consisted of a convolution neural network with the following layers and layer sizes 
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
+| Layer         		|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| Input image       | 160x320x3   |
+| Lambda layer    |  Normalization of image   |
+|Convolution 1   |  5x5 filter, layer depth =24 and ReLu activation   |
+|Convolution 2   |  5x5 filter, layer depth =36 and ReLu activation   |
+|Convolution 3   |  5x5 filter, layer depth =48 and ReLu activation   |
+|Convolution 4   |  3x3 filter, layer depth =64 and ReLu activation   |
+|Convolution 5   |  3x3 filter, layer depth =64 and ReLu activation   |
+|Flatten |    |
+|Dense 1 | output size = 100 |
+|Dense 2 | output size = 50 |
+|Dense 3 | output size = 1 |
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+The data set provided by Udacity has been used and I haven't collected my own simulator data. I used this data for training the model using 'fit_generator' function. The plot below shows the decrease in loss of training and validation sets with number of epochs.
 
-![alt text][image2]
+![Alt Text](./mean_square_error.png)
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+#### 4. Vehicle Simulation
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+The below GIF shows simulation of autonomous vehicle model using the architecture described above. The vehicle drove well in Track-1, but failed to do the same in Track-2.
 
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+![Alt Text](./video.gif)
