@@ -108,4 +108,10 @@ The data set provided by Udacity has been used and I haven't collected my own si
 
 The below GIF shows simulation of autonomous vehicle model using the architecture described above. The vehicle drove well in Track-1, but failed to do the same in Track-2.
 
-![Alt Text](./video.gif)
+![Alt Text](./Track-1_simulation.gif)
+
+##### Some afterthoughts for improvement:
+
+1. The model failed to run on Track-2 as it was trained on Track-1 data set. However, as Track-2 is quite different from Track-1, generating Track-2 driving data from simulator and using it for training can definitely improve the performance of the model on Track-2.
+
+2. Other than utlizing the data from three cameras, the data set can be enlarged by flipping data, adjusting brightness, rotating images and shearing images. Doing this not only increases the amount of data for training, but also makes the model robust to a variety of driving environment conditions.
