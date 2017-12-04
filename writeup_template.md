@@ -94,9 +94,9 @@ The final model architecture (model.py lines 92-103) consisted of a convolution 
 |Convolution 4   |  3x3 filter, layer depth =64 and ReLu activation   |
 |Convolution 5   |  3x3 filter, layer depth =64 and ReLu activation   |
 |Flatten |    |
-|Dense 1 | output size = 100 |
-|Dense 2 | output size = 50 |
-|Dense 3 | output size = 1 |
+|Dense 1 | Output size = 100 |
+|Dense 2 | Output size = 50 |
+|Dense 3 | Output size = 1 |
 
 #### 3. Creation of the Training Set & Training Process
 
