@@ -52,7 +52,7 @@ The model was tested by running it through the simulator and ensuring that the v
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 105).
 
 #### 4. Appropriate training data
 
